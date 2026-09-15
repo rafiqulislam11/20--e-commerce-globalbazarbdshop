@@ -1,0 +1,31 @@
+export const JWT_SECRET = process.env.JWT_SECRET || 'globalbazarbd_super_secret_jwt_key_2026';
+export const PORT = process.env.PORT || 5000;
+
+export const DEFAULT_SETTINGS = {
+  store_name: 'Global Bazar BD Shop',
+  owner_name: 'Rafiqul Islam',
+  phone: '01310-824987',
+  whatsapp_number: '01310-824987',
+  email: 'globalbazarbdshop@gmail.com',
+  bkash_number: '01930-279175',
+  nagad_number: '01930-279175',
+  tagline_en: 'Shop Smart. Live Better.',
+  tagline_bn: 'স্মার্ট শপিং, সহজ জীবন',
+  address: 'SQ Color Master 3 No, Jamirdia, Hobirbari, Bhaluka, Mymensingh, Bangladesh',
+  country: 'Bangladesh',
+  currency_symbol: '৳',
+  currency_code: 'BDT',
+  shipping_inside_dhaka: 70,
+  shipping_outside_dhaka: 130,
+  shipping_express: 160,
+  free_shipping_threshold: 2000,
+  tax_percentage: 0,
+  facebook_url: 'https://facebook.com/globalbazarbdshop',
+  instagram_url: 'https://instagram.com/globalbazarbdshop',
+  youtube_url: 'https://youtube.com/globalbazarbdshop',
+  website_url: 'http://localhost:3000',
+  logo_url: '',
+  favicon_url: '',
+  announcement_text_bn: '🎉 স্পেশাল অফার! ২০০০ টাকার বেশি অর্ডারে সারা বাংলাদেশে ফ্রি হোম ডেলিভারি! হেল্পলাইন: 01310-824987',
+  announcement_text_en: '🎉 Special Offer! Free home delivery across Bangladesh on orders over ৳2000! Helpline: 01310-824987',
+};
