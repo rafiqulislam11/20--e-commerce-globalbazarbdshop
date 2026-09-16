@@ -1,0 +1,20 @@
+# Auto-detect text files and normalize line endings to LF
+* text=auto eol=lf
+
+# Source code & assets
+*.ts text eol=lf
+*.tsx text eol=lf
+*.json text eol=lf
+*.html text eol=lf
+*.css text eol=lf
+*.md text eol=lf
+*.svg text eol=lf
+
+# Binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.ico binary
+*.webp binary
+*.db binary
+*.sqlite binary
