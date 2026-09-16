@@ -17,15 +17,12 @@ import {
   CheckCircle2,
   AlertTriangle,
   Search,
-  Truck,
   DollarSign,
   TrendingUp,
   Clock,
-  ArrowUpRight,
   X,
   Key,
   Sparkles,
-  Eye,
   CreditCard,
   RefreshCw,
   XCircle,
@@ -47,7 +44,7 @@ const IMAGE_PRESETS = [
 ];
 
 export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNavigate }) => {
-  const { lang, formatPrice, t } = useLanguage();
+  const { formatPrice, t } = useLanguage();
   const { user, isAdmin, isStaff, login } = useAuth();
   const [loggingInAsAdmin, setLoggingInAsAdmin] = useState(false);
 
@@ -154,63 +151,6 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
       setLoggingInAsAdmin(false);
     }
   };
-
-  // Check admin authorization
-  if (!user || (!isAdmin && !isStaff)) {
-    return (
-      <div className="max-w-md mx-auto py-20 px-4 text-center space-y-5 select-none">
-        <div className="w-16 h-16 bg-amber-100 text-amber-700 rounded-3xl flex items-center justify-center mx-auto shadow-inner">
-          <Key className="w-8 h-8" />
-        </div>
-        <div className="space-y-1">
-          <h2 className="text-xl font-black text-gray-900">অ্যাডমিন প্যানেল (Admin Access)</h2>
-          <p className="text-xs text-gray-500">
-            পণ্য যোগ করা, অর্ডার ম্যানেজমেন্ট ও সেটিংস পরিচালনার জন্য অ্যাডমিন প্যানেলে প্রবেশ করুন।
-          </p>
-        </div>
-
-        <div className="p-4 bg-gray-50 border border-gray-200 rounded-2xl text-left text-xs space-y-1.5">
-          <p className="font-bold text-gray-700 flex items-center gap-1.5">
-            <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-            <span>অ্যাডমিন ডেমো এক্সেস:</span>
-          </p>
-          <p className="font-mono text-gray-600">ইমেইল: <strong className="text-teal-800">admin@globalbazarbd.com</strong></p>
-          <p className="font-mono text-gray-600">পাসওয়ার্ড: <strong className="text-teal-800">Admin@123456</strong></p>
-        </div>
-
-        <div className="space-y-2.5">
-          <button
-            onClick={handleQuickAdminLogin}
-            disabled={loggingInAsAdmin}
-            className="w-full py-3.5 bg-gradient-to-r from-teal-700 to-teal-800 hover:from-teal-800 hover:to-teal-900 text-white rounded-2xl text-xs font-black shadow-lg shadow-teal-700/20 flex items-center justify-center gap-2 cursor-pointer transition-all hover:scale-102 disabled:opacity-50"
-          >
-            <Key className="w-4 h-4 text-amber-300" />
-            <span>{loggingInAsAdmin ? 'লগইন হচ্ছে...' : '🔑 ১-ক্লিকে অ্যাডমিন প্যানেলে প্রবেশ করুন'}</span>
-          </button>
-          
-          <button
-            onClick={() => onNavigate('auth', 'login')}
-            className="w-full py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-2xl text-xs font-bold transition-colors cursor-pointer"
-          >
-            লগইন পেইজে যান (Login Page)
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  // Load Initial Data (Dashboard stats, categories, products)
-  useEffect(() => {
-    fetchApi<{ success: boolean; stats: any }>('/admin/dashboard')
-      .then(res => {
-        if (res.success) setStats(res.stats);
-      })
-      .catch(() => {})
-      .finally(() => setLoadingStats(false));
-
-    loadCategories();
-    loadProducts();
-  }, []);
 
   // Load Products
   const loadProducts = () => {
@@ -348,7 +288,24 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
     }
   };
 
+  // Load Initial Data (Dashboard stats, categories, products)
   useEffect(() => {
+    if (!user || (!isAdmin && !isStaff)) return;
+
+    fetchApi<{ success: boolean; stats: any }>('/admin/dashboard')
+      .then(res => {
+        if (res.success) setStats(res.stats);
+      })
+      .catch(() => {})
+      .finally(() => setLoadingStats(false));
+
+    loadCategories();
+    loadProducts();
+  }, [user, isAdmin, isStaff]);
+
+  useEffect(() => {
+    if (!user || (!isAdmin && !isStaff)) return;
+
     if (activeTab === 'products') {
       loadProducts();
       loadCategories();
@@ -360,7 +317,7 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
     if (activeTab === 'customers') loadCustomers();
     if (activeTab === 'reviews') loadReviews();
     if (activeTab === 'settings') loadSettings();
-  }, [activeTab, orderStatusFilter, orderSearch, paymentStatusFilter]);
+  }, [activeTab, orderStatusFilter, orderSearch, paymentStatusFilter, user, isAdmin, isStaff]);
 
   // Filtered Products for Admin Table
   const filteredProducts = products.filter(p => {
@@ -601,6 +558,50 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
     }
   };
 
+  // Check admin authorization gate
+  if (!user || (!isAdmin && !isStaff)) {
+    return (
+      <div className="max-w-md mx-auto py-20 px-4 text-center space-y-5 select-none">
+        <div className="w-16 h-16 bg-amber-100 text-amber-700 rounded-3xl flex items-center justify-center mx-auto shadow-inner">
+          <Key className="w-8 h-8" />
+        </div>
+        <div className="space-y-1">
+          <h2 className="text-xl font-black text-gray-900">অ্যাডমিন প্যানেল (Admin Access)</h2>
+          <p className="text-xs text-gray-500">
+            পণ্য যোগ করা, অর্ডার ম্যানেজমেন্ট ও সেটিংস পরিচালনার জন্য অ্যাডমিন প্যানেলে প্রবেশ করুন।
+          </p>
+        </div>
+
+        <div className="p-4 bg-gray-50 border border-gray-200 rounded-2xl text-left text-xs space-y-1.5">
+          <p className="font-bold text-gray-700 flex items-center gap-1.5">
+            <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+            <span>অ্যাডমিন ডেমো এক্সেস:</span>
+          </p>
+          <p className="font-mono text-gray-600">ইমেইল: <strong className="text-teal-800">admin@globalbazarbd.com</strong></p>
+          <p className="font-mono text-gray-600">পাসওয়ার্ড: <strong className="text-teal-800">Admin@123456</strong></p>
+        </div>
+
+        <div className="space-y-2.5">
+          <button
+            onClick={handleQuickAdminLogin}
+            disabled={loggingInAsAdmin}
+            className="w-full py-3.5 bg-gradient-to-r from-teal-700 to-teal-800 hover:from-teal-800 hover:to-teal-900 text-white rounded-2xl text-xs font-black shadow-lg shadow-teal-700/20 flex items-center justify-center gap-2 cursor-pointer transition-all hover:scale-102 disabled:opacity-50"
+          >
+            <Key className="w-4 h-4 text-amber-300" />
+            <span>{loggingInAsAdmin ? 'লগইন হচ্ছে...' : '🔑 ১-ক্লিকে অ্যাডমিন প্যানেলে প্রবেশ করুন'}</span>
+          </button>
+          
+          <button
+            onClick={() => onNavigate('auth', 'login')}
+            className="w-full py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-2xl text-xs font-bold transition-colors cursor-pointer"
+          >
+            লগইন পেইজে যান (Login Page)
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 select-none space-y-6">
       {/* Top Header */}
@@ -739,7 +740,14 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
         {/* Content Area (9 cols) */}
         <div className="lg:col-span-9 space-y-6">
           {/* TAB 1: DASHBOARD OVERVIEW */}
-          {activeTab === 'dashboard' && stats && (
+          {activeTab === 'dashboard' && loadingStats && (
+            <div className="bg-white rounded-3xl border border-gray-200 p-12 text-center">
+              <div className="w-8 h-8 border-3 border-teal-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
+              <p className="text-xs text-gray-500 mt-3">ড্যাশবোর্ড এনালাইটিক্স লোড হচ্ছে...</p>
+            </div>
+          )}
+
+          {activeTab === 'dashboard' && !loadingStats && stats && (
             <div className="space-y-6 animate-in fade-in-50">
               {/* KPI Stat Cards */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
@@ -826,7 +834,17 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-gray-100">
                 <h3 className="text-base font-bold text-gray-900">{t('admin.orders')}</h3>
 
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2">
+                  <div className="relative">
+                    <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                    <input
+                      type="text"
+                      placeholder="অর্ডার নং / গ্রাহক খুঁজুন..."
+                      value={orderSearch}
+                      onChange={e => setOrderSearch(e.target.value)}
+                      className="text-xs pl-8 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-xl font-medium focus:bg-white focus:outline-none focus:border-teal-600"
+                    />
+                  </div>
                   <select
                     value={orderStatusFilter}
                     onChange={e => setOrderStatusFilter(e.target.value)}

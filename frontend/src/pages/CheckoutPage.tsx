@@ -10,8 +10,6 @@ import {
   User,
   MapPin,
   ShieldCheck,
-  Phone,
-  Mail,
   AlertCircle
 } from 'lucide-react';
 

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useLanguage } from '../context/LanguageContext';
-import { CheckCircle2, Printer, ArrowRight, Package, Truck, Phone } from 'lucide-react';
+import { CheckCircle2, Printer, Package, Truck } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 interface OrderSuccessPageProps {

@@ -21,6 +21,7 @@ export const FlashSaleSection: React.FC<FlashSaleSectionProps> = ({
 
   // Real-time Countdown Timer
   const [timeLeft, setTimeLeft] = useState({
+    days: 0,
     hours: 23,
     minutes: 45,
     seconds: 30
@@ -31,17 +32,20 @@ export const FlashSaleSection: React.FC<FlashSaleSectionProps> = ({
       ? new Date(flashSaleCampaign.end_time).getTime()
       : Date.now() + 24 * 60 * 60 * 1000;
 
-    const timer = setInterval(() => {
+    const calculate = () => {
       const now = Date.now();
       const diff = Math.max(0, targetDate - now);
 
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
       const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
       const minutes = Math.floor((diff / (1000 * 60)) % 60);
       const seconds = Math.floor((diff / 1000) % 60);
 
-      setTimeLeft({ hours, minutes, seconds });
-    }, 1000);
+      setTimeLeft({ days, hours, minutes, seconds });
+    };
 
+    calculate();
+    const timer = setInterval(calculate, 1000);
     return () => clearInterval(timer);
   }, [flashSaleCampaign]);
 
@@ -77,6 +81,14 @@ export const FlashSaleSection: React.FC<FlashSaleSectionProps> = ({
           <div className="flex items-center gap-2 bg-black/30 backdrop-blur-md px-4 py-2 rounded-2xl border border-white/20 self-start sm:self-auto">
             <span className="text-xs font-semibold text-amber-300">{t('home.deal_ends_in')}</span>
             <div className="flex items-center gap-1 font-mono font-black text-sm">
+              {timeLeft.days > 0 && (
+                <>
+                  <span className="bg-white text-gray-900 px-2 py-1 rounded-lg">
+                    {timeLeft.days}d
+                  </span>
+                  <span>:</span>
+                </>
+              )}
               <span className="bg-white text-gray-900 px-2 py-1 rounded-lg">
                 {String(timeLeft.hours).padStart(2, '0')}
               </span>

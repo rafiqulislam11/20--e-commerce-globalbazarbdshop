@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useLanguage } from '../context/LanguageContext';
 import { ShieldCheck, Truck, RotateCcw, FileText } from 'lucide-react';
 
 interface LegalPageProps {
@@ -8,7 +7,6 @@ interface LegalPageProps {
 }
 
 export const LegalPage: React.FC<LegalPageProps> = ({ initialTab = 'return' }) => {
-  const { lang } = useLanguage();
   const [tab, setTab] = useState(initialTab);
 
   return (

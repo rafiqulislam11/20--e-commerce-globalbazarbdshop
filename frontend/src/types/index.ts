@@ -133,8 +133,11 @@ export interface Order {
   discount: number;
   grand_total: number;
   payment_method: 'COD' | 'BKASH' | 'NAGAD' | 'CARD' | 'BANK';
-  payment_status: 'PENDING' | 'PAID' | 'FAILED' | 'CANCELLED';
-  order_status: 'PENDING' | 'CONFIRMED' | 'PROCESSING' | 'PACKED' | 'SHIPPED' | 'OUT_FOR_DELIVERY' | 'DELIVERED' | 'CANCELLED' | 'RETURNED' | 'REFUNDED';
+  payment_status: 'PENDING' | 'PAYMENT_VERIFICATION_PENDING' | 'PAID' | 'FAILED' | 'CANCELLED' | 'CORRECTION_REQUESTED';
+  order_status: 'PENDING' | 'PAYMENT_VERIFICATION' | 'CONFIRMED' | 'PROCESSING' | 'PACKED' | 'SHIPPED' | 'OUT_FOR_DELIVERY' | 'DELIVERED' | 'CANCELLED' | 'RETURNED' | 'REFUNDED';
+  transaction_id?: string | null;
+  payment_phone?: string | null;
+  payment_proof?: string | null;
   notes?: string;
   created_at: string;
   items?: OrderItem[];

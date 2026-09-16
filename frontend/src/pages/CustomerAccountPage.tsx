@@ -50,13 +50,17 @@ export const CustomerAccountPage: React.FC<CustomerAccountPageProps> = ({
   }, [user]);
 
   useEffect(() => {
+    if (!user) {
+      setLoadingOrders(false);
+      return;
+    }
     fetchApi<{ success: boolean; orders: Order[] }>('/orders/my-orders')
       .then(res => {
         if (res.success && res.orders) setOrders(res.orders);
       })
       .catch(() => {})
       .finally(() => setLoadingOrders(false));
-  }, []);
+  }, [user]);
 
   if (!user) {
     return (

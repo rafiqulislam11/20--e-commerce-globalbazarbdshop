@@ -245,7 +245,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ initialTab = 'login', onNavi
 
             <button
               type="button"
-              onClick={() => handleQuickDemo('tanvir.hasan@gmail.com', 'Customer@123', 'account')}
+              onClick={() => handleQuickDemo('tanvir.hasan@gmail.com', 'Customer@123456', 'account')}
               className="p-2 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 font-semibold text-center hover:bg-gray-100 transition-colors cursor-pointer"
             >
               <span className="block font-bold">Customer</span>

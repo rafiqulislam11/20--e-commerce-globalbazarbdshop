@@ -26,20 +26,20 @@ export const WishlistProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   const toggleWishlist = (product: Product) => {
     setWishlist(prev => {
-      const exists = prev.some(p => p.id === product.id);
+      const exists = prev.some(p => String(p.id) === String(product.id));
       if (exists) {
-        return prev.filter(p => p.id !== product.id);
+        return prev.filter(p => String(p.id) !== String(product.id));
       }
       return [...prev, product];
     });
   };
 
   const isInWishlist = (productId: string) => {
-    return wishlist.some(p => p.id === productId);
+    return wishlist.some(p => String(p.id) === String(productId));
   };
 
   const removeFromWishlist = (productId: string) => {
-    setWishlist(prev => prev.filter(p => p.id !== productId));
+    setWishlist(prev => prev.filter(p => String(p.id) !== String(productId)));
   };
 
   return (
